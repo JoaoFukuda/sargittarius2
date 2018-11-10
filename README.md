@@ -15,6 +15,6 @@ Jogos levam tempo, paciência e muito ~~bate-cabeça~~ amor.
 
 ps.: O código tá inteiro em inglês! Se não gosta, vai procurar outro jogo pra ver código.
 
-## Contribuidores
+## Contribuintes
 * [João Fukuda](https://github.com/JoaoFukuda) - *Programador chefe, Idealizador*
 * Mais ninguém (crise ta foda)
