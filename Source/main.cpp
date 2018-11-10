@@ -24,11 +24,18 @@
 
 // Include on sub-files later on (this is just a placeholder for now... or not)
 #include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
 int main()
 {
     // Game main window
-    sf::Window window(sf::VideoMode(640, 480), "Sargittarius 2.X");
+    sf::RenderWindow window(sf::VideoMode(640, 480), "Sargittarius 2.X");
+
+    sf::Vertex line[] = 
+    {
+        sf::Vertex(sf::Vector2f(0.f, 0.f)),
+        sf::Vertex(sf::Vector2f(0.f, 0.f))
+    };
     
     // Game main loop
     while(window.isOpen())
@@ -41,8 +48,22 @@ int main()
                 window.close();
         }
 
-        // Key handling
+        // Button press handling
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            line[1] = sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window)));
+        }
+
+        line[0] = sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window)));
+
+        // Clear and display window (very self-explanatory)
+        // Anything that needs to be drawn needs to be drawn in between those two commands
+        window.clear(sf::Color::Black);
+
+        window.draw(line, 2, sf::Lines);
+
+        window.display();
     }
 
     return 0;

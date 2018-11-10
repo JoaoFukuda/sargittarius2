@@ -10,15 +10,20 @@
             "args": [
                 "-o",
                 "bin\\x86\\sargittarius2.exe",
+                
                 "-g",
                 "-Wall",
                 "-mwindows",
+                
                 "-IDependencias\\x86\\SFML\\include",
+                
                 "Source\\main.cpp",
+                
                 "-LDependencias\\x86\\SFML\\lib",
                 "-lsfml-graphics",
                 "-lsfml-window",
                 "-lsfml-system",
+                
                 "-std=c++11"
             ],
             "group": {
@@ -36,15 +41,20 @@
             "args": [
                 "-o",
                 "bin\\x64\\sargittarius2.exe",
+                
                 "-g",
                 "-Wall",
                 "-mwindows",
+                
                 "-IDependencias\\x64\\SFML\\include",
+                
                 "Source\\main.cpp",
+                
                 "-LDependencias\\x64\\SFML\\lib",
                 "-lsfml-graphics",
                 "-lsfml-window",
                 "-lsfml-system",
+                
                 "-std=c++11"
             ],
             "group": {
