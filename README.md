@@ -11,7 +11,7 @@ Jogos levam tempo, paciência e muito ~~bate-cabeça~~ amor.
 
 ## Como compilar?
 * Utilize o Visual Studio Code e compile usando o "Compilar Jogo(x86)" ou "Compilar Jogo(x64)" (o x64 n ta funcionando por motivos obscuros, mais informações em versões posteriores) * dependendo da sua preferencia.<br/>
-* Os binários já estão compilados nas pastas bin respectivas.
+* Os binários já estão compilados nas pastas bin respectivas (só precisa re-compilar se quiser mudar alguma coisa ou se eu esquecer de compilar).
 
 ps.: O código tá inteiro em inglês! Se não gosta, vai procurar outro jogo pra ver código.
 

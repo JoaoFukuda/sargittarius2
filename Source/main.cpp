@@ -48,7 +48,7 @@ int main()
                 window.close();
         }
 
-        // Button press handling
+        // Input handling at it's best
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
