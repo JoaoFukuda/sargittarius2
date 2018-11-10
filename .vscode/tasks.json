@@ -1,0 +1,59 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compilar Jogo(x86)",
+            "type": "shell",
+            "command": "C:\\mingw\\mingw32\\bin\\g++.exe",
+            "args": [
+                "-o",
+                "bin\\x86\\sargittarius2.exe",
+                "-g",
+                "-Wall",
+                "-mwindows",
+                "-IDependencias\\x86\\SFML\\include",
+                "Source\\main.cpp",
+                "-LDependencias\\x86\\SFML\\lib",
+                "-lsfml-graphics",
+                "-lsfml-window",
+                "-lsfml-system",
+                "-std=c++11"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Compilar Jogo(x64)",
+            "type": "shell",
+            "command": "C:\\mingw\\mingw64\\bin\\g++.exe",
+            "args": [
+                "-o",
+                "bin\\x64\\sargittarius2.exe",
+                "-g",
+                "-Wall",
+                "-mwindows",
+                "-IDependencias\\x64\\SFML\\include",
+                "Source\\main.cpp",
+                "-LDependencias\\x64\\SFML\\lib",
+                "-lsfml-graphics",
+                "-lsfml-window",
+                "-lsfml-system",
+                "-std=c++11"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}

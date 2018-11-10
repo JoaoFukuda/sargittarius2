@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Compilar Jogo(x86)",
+            "includePath": [
+                "${workspaceFolder}\\Dependencias\\x86\\SFML\\include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "C:\\mingw\\mingw32\\bin\\g++.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
