@@ -31,6 +31,25 @@ struct Line
     };
 };
 
+struct PlanetLink
+{
+    Planet planet;
+    PlanetLink *next;
+};
+
+struct PlanetList
+{
+    PlanetLink *head = NULL;
+
+    void Push(Planet planet)
+    {
+        PlanetLink *pl = (PlanetLink*)malloc(sizeof(PlanetLink));
+        pl->planet = planet;
+        pl->next = head;
+        head = pl;
+    };
+};
+
 class Planet
 {
 private:
@@ -46,10 +65,11 @@ public:
 class Player
 {
 private:
-    float position;
     Planet planet;
-    bool isAlive;
 public:
+    float position;
+    bool isAlive;
+    
     Player(){};
     Player(Planet planet);
 
@@ -66,5 +86,5 @@ public:
     Arrow(Player player);
 
     Line Draw();
-    void Update(Planet planets[]);
+    void Update(PlanetList planets);
 };

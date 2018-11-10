@@ -36,7 +36,8 @@ int main()
         sf::Vertex(sf::Vector2f(0.f, 0.f)),
         sf::Vertex(sf::Vector2f(0.f, 0.f))
     };
-    Planet planet = Planet(10, sf::Vector2f(20, 20));
+    Planet planet = Planet(75, sf::Vector2f(100, 100));
+    Player player = Player(planet);
     
     // Game main loop
     while(window.isOpen())
@@ -51,10 +52,11 @@ int main()
 
         // Input handling at it's best
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
-        if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
-        {
-            line[1] = sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window)));
-        }
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) line[1] = sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window)));
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) player.position += 1;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)) player.position -= 1;
+        
+            
 
         line[0] = sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window)));
 
@@ -63,7 +65,10 @@ int main()
         window.clear(sf::Color::Black);
 
         window.draw(line, 2, sf::Lines);
+        
         window.draw(planet.Draw());
+
+        window.draw(player.Draw());
 
         window.display();
     }

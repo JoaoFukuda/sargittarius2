@@ -37,10 +37,11 @@ sf::CircleShape Planet::Draw()
 Player::Player(Planet planet)
 {
     this->planet = planet;
+    isAlive = true;
 }
 
 sf::RectangleShape Player::Draw()
-{
+{//FIXME: Set the position relative to the planet, not (0,0)
     sf::RectangleShape shape = sf::RectangleShape(sf::Vector2f(80, 40));
     shape.setOrigin(40, 20);
     shape.setRotation(position);
@@ -53,7 +54,7 @@ Arrow::Arrow(Player player)
 }
 
 Line Arrow::Draw()
-{
+{//FIXME: Get the clamped position 1, not the dinamic
     sf::Vertex line[] =
     {
         sf::Vector2f(position - velocity),
@@ -62,12 +63,14 @@ Line Arrow::Draw()
     return Line(line);
 }
 
-void Arrow::Update(Planet planets[])
-{
-    /*
-    for(Planet planet: planets)
+void Arrow::Update(PlanetList planets)
+{//FIXME: Do physics things
+//TODO: Get the hitscan here?
+    PlanetLink *curr = planets.head;
+    while(curr)
     {
-        //TODO: Physics here
+        //Do physics here and add to the valocity
     }
-    */
+    //Clamp velocity?
+    position += velocity;
 }
