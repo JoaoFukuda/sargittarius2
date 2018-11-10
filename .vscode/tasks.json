@@ -6,7 +6,7 @@
         {
             "label": "Compilar Jogo(x86)",
             "type": "shell",
-            "command": "C:\\mingw\\mingw32\\bin\\g++.exe",
+            "command": "Dependencias\\x86\\MinGW\\bin\\g++.exe",
             "args": [
                 "-o",
                 "bin\\x86\\sargittarius2.exe",
