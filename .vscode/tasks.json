@@ -17,6 +17,7 @@
                 
                 "-IDependencias\\x86\\SFML\\include",
                 
+                "Source\\object.cpp",
                 "Source\\main.cpp",
                 
                 "-LDependencias\\x86\\SFML\\lib",
@@ -30,9 +31,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": [
-                "$gcc"
-            ]
+            "problemMatcher": []
         },
         {
             "label": "Compilar Jogo(x64)",
@@ -61,9 +60,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": [
-                "$gcc"
-            ]
+            "problemMatcher": []
         }
     ]
 }

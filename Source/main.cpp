@@ -24,7 +24,7 @@
 
 // Include on sub-files later on (this is just a placeholder for now... or not)
 #include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
+#include "object.hpp"
 
 int main()
 {
@@ -36,6 +36,7 @@ int main()
         sf::Vertex(sf::Vector2f(0.f, 0.f)),
         sf::Vertex(sf::Vector2f(0.f, 0.f))
     };
+    Planet planet = Planet(10, sf::Vector2f(20, 20));
     
     // Game main loop
     while(window.isOpen())
@@ -62,6 +63,7 @@ int main()
         window.clear(sf::Color::Black);
 
         window.draw(line, 2, sf::Lines);
+        window.draw(planet.Draw());
 
         window.display();
     }
