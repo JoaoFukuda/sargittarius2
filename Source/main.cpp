@@ -18,22 +18,31 @@
     If in any doubts, contact me at <joao.fukuda@usp.br>
  */
 
+//        |
+// Needed V (I already forgot it's purpose, but keep it)
 #define SFML_STATIC
 
+// Include on sub-files later on (this is just a placeholder for now... or not)
 #include <SFML/Window.hpp>
 
 int main()
 {
+    // Game main window
     sf::Window window(sf::VideoMode(640, 480), "Sargittarius 2.X");
     
+    // Game main loop
     while(window.isOpen())
     {
+        // Event handling
         sf::Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
+        // Key handling
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
     }
 
     return 0;
