@@ -13,7 +13,7 @@
                 
                 "-g",
                 "-Wall",
-                "-mwindows",
+                // "-mwindows",
                 
                 "-IDependencias\\x86\\SFML\\include",
                 
@@ -43,7 +43,7 @@
                 
                 "-g",
                 "-Wall",
-                "-mwindows",
+                // "-mwindows",
                 
                 "-IDependencias\\x64\\SFML\\include",
                 

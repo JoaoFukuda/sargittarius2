@@ -19,6 +19,8 @@
  */
 
 #include "object.hpp"
+#include <math.h>
+#define PI 3.14
 
 Planet::Planet(float radius, sf::Vector2f position)
 {
@@ -29,7 +31,7 @@ Planet::Planet(float radius, sf::Vector2f position)
 sf::CircleShape Planet::Draw()
 {
     sf::CircleShape shape = sf::CircleShape(radius);
-    shape.setOrigin(radius/2, radius/2);
+    shape.setOrigin(radius, radius);
     shape.setPosition(position);
     return shape;
 }
@@ -41,10 +43,12 @@ Player::Player(Planet planet)
 }
 
 sf::RectangleShape Player::Draw()
-{//FIXME: Set the position relative to the planet, not (0,0)
-    sf::RectangleShape shape = sf::RectangleShape(sf::Vector2f(80, 40));
-    shape.setOrigin(40, 20);
+{
+    sf::RectangleShape shape = sf::RectangleShape(sf::Vector2f(24, 12));
+    shape.setOrigin(12, 6);
     shape.setRotation(position);
+    sf::Vector2f posOffset = sf::Vector2f(cos(position*PI*2/360), sin(position*PI*2/360)) * (planet.radius + 10);
+    shape.setPosition(planet.position + posOffset);
     return shape;
 }
 
@@ -54,10 +58,14 @@ Arrow::Arrow(Player player)
 }
 
 Line Arrow::Draw()
-{//FIXME: Get the clamped position 1, not the dinamic
+{
+    sf::Vector2f tail = sf::Vector2f(
+        (velocity).x * 30 / ((velocity).x + (velocity).y),
+        (velocity).y * 30 / ((velocity).x + (velocity).y)
+    );
     sf::Vertex line[] =
     {
-        sf::Vector2f(position - velocity),
+        tail + position,
         sf::Vector2f(position)
     };
     return Line(line);
@@ -70,6 +78,7 @@ void Arrow::Update(PlanetList planets)
     while(curr)
     {
         //Do physics here and add to the valocity
+        curr = curr->next;
     }
     //Clamp velocity?
     position += velocity;

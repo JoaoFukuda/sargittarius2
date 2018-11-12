@@ -31,6 +31,17 @@ struct Line
     };
 };
 
+class Planet
+{
+public:
+    sf::Vector2f position;
+    float radius;
+    Planet(){};
+    Planet(float radius, sf::Vector2f position);
+    
+    sf::CircleShape Draw();
+};
+
 struct PlanetLink
 {
     Planet planet;
@@ -50,23 +61,10 @@ struct PlanetList
     };
 };
 
-class Planet
-{
-private:
-    sf::Vector2f position;
-    float radius;
-public:
-    Planet(){};
-    Planet(float radius, sf::Vector2f position);
-    
-    sf::CircleShape Draw();
-};
-
 class Player
 {
-private:
-    Planet planet;
 public:
+    Planet planet;
     float position;
     bool isAlive;
     
@@ -80,9 +78,10 @@ class Arrow
 {
 private:
     Player player;
+public:
     sf::Vector2f position;
     sf::Vector2f velocity;
-public:
+    
     Arrow(Player player);
 
     Line Draw();
