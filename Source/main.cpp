@@ -26,18 +26,40 @@
 #include <SFML/Window.hpp>
 #include "object.hpp"
 
+#ifndef IOSTREAM
+#include <iostream>
+#endif
+
+enum Part
+{
+    Walking,
+    Aiming,
+    Shooting
+};
+
 int main()
 {
     // Game main window
     sf::RenderWindow window(sf::VideoMode(640, 480), "Sargittarius 2.X");
+    window.setPosition(sf::Vector2i(200, 200));
 
-    Planet planet = Planet(75, sf::Vector2f(100, 100));
-    PlanetList pl;
-    pl.Push(planet);
+    Part part = Walking;
+
+    PlanetList planets;
+    PlayerList players;
+    ArrowList arrows;
+    
+    // CHANGE TO BE AN AUTOMATIC PLANET/PLAYER CREATOR
+    //-------------------------------------------------
+    Planet planet = Planet(75, sf::Vector2f(200, 100));
+    planets.Push(planet);
+
     Player player = Player(planet);
-    Arrow arrow = Arrow(player);
-    arrow.position = sf::Vector2f(0, 0);
-    arrow.velocity = sf::Vector2f(0.25, 0.25);
+    players.Push(player);
+    //-------------------------------------------------
+
+    PlayerLink *currentPlayer = players.head;
+    sf::Vertex mouseAim[2];
     
     // Game main loop
     while(window.isOpen())
@@ -52,27 +74,67 @@ int main()
 
         // Input handling at it's best
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+
+        if(part != Shooting && sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
-            player.position += 16 / player.planet.radius;
+            if(part != Aiming)
+            {
+                mouseAim[0] = sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window)));
+                Arrow arrow = Arrow(currentPlayer->player);
+                arrows.Push(arrow);
+                part = Aiming;
+            }
+            mouseAim[1] = sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window)));
         }
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        if(part == Aiming && !sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
-            player.position -= 16 / player.planet.radius;
+            currentPlayer = currentPlayer->next;
+            if(!currentPlayer) currentPlayer = players.head;
+            part = Walking;
         }
+        if(part == Walking)
+        {
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            {
+                currentPlayer->player.position += 16 / currentPlayer->player.planet.radius;
+            }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            {
+                currentPlayer->player.position -= 16 / currentPlayer->player.planet.radius;
+            }
+        }
+
         // Clear and display window (very self-explanatory)
         // Anything that needs to be drawn needs to be drawn in between those two commands
         window.clear(sf::Color::Black);
         
-        window.draw(pl.head->planet.Draw());
+        PlanetLink *currPlanet = planets.head;
+        while(currPlanet)
+        {
+            window.draw(currPlanet->planet.Draw());
+            currPlanet = currPlanet->next;
+        }
 
-        window.draw(player.Draw());
+        PlayerLink *currPlayer = players.head;
+        while(currPlayer)
+        {
+            window.draw(currPlayer->player.Draw());
+            currPlayer = currPlayer->next;
+        }
 
-        arrow.Update(pl);
-        window.draw(arrow.Draw().vertex, 2, sf::Lines);
+        ArrowLink *currArrow = arrows.head;
+        if(part == Shooting && currArrow->arrow.Update(planets)) part = Walking;
+        while(currArrow)
+        {
+            window.draw(currArrow->arrow.Draw().vertex, 2, sf::Lines);
+            currArrow = currArrow->next;
+        }
+        if(part == Aiming) window.draw(mouseAim, 2, sf::Lines);
 
         window.display();
     }
+
+    system("pause");
 
     return 0;
 }

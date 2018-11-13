@@ -18,6 +18,10 @@
     If in any doubts, contact me at <joao.fukuda@usp.br>
  */
 
+#ifndef IOSTREAM
+#include <iostream>
+#endif
+
 #include "object.hpp"
 #include <math.h>
 #define PI 3.14
@@ -71,15 +75,22 @@ Line Arrow::Draw()
     return Line(line);
 }
 
-void Arrow::Update(PlanetList planets)
-{//FIXME: Do physics things
-//TODO: Get the hitscan here?
+bool Arrow::Update(PlanetList planets)
+{
     PlanetLink *curr = planets.head;
+    bool collision = false;
     while(curr)
     {
-        //Do physics here and add to the valocity
+        sf::Vector2f relPos = (curr->planet.position - position);
+        float distance2 = relPos.x*relPos.x + relPos.y*relPos.y;
+        float force = PI*curr->planet.radius*curr->planet.radius/(distance2 * 1000);
+
+        velocity = velocity + sf::Vector2f(force * (relPos.x / sqrtf(relPos.y*relPos.y+relPos.x*relPos.x)), force * (relPos.y / sqrtf(relPos.y*relPos.y+relPos.x*relPos.x)));
+
+        if(distance2 > curr->planet.radius*curr->planet.radius) collision = true;
+        
         curr = curr->next;
     }
-    //Clamp velocity?
     position += velocity;
+    return collision;
 }

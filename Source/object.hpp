@@ -74,6 +74,26 @@ public:
     sf::RectangleShape Draw();
 };
 
+//PLAYER COULD USE A CONSTANT LIST (ARRAY)
+struct PlayerLink
+{
+    Player player;
+    PlayerLink *next;
+};
+
+struct PlayerList
+{
+    PlayerLink *head = NULL;
+
+    void Push(Player player)
+    {
+        PlayerLink *pl = (PlayerLink*)malloc(sizeof(PlayerLink));
+        pl->player = player;
+        pl->next = head;
+        head = pl;
+    };
+};
+
 class Arrow
 {
 private:
@@ -85,5 +105,24 @@ public:
     Arrow(Player player);
 
     Line Draw();
-    void Update(PlanetList planets);
+    bool Update(PlanetList planets);
+};
+
+struct ArrowLink
+{
+    Arrow arrow;
+    ArrowLink *next;
+};
+
+struct ArrowList
+{
+    ArrowLink *head = NULL;
+
+    void Push(Arrow arrow)
+    {
+        ArrowLink *pl = (ArrowLink*)malloc(sizeof(ArrowLink));
+        pl->arrow = arrow;
+        pl->next = head;
+        head = pl;
+    };
 };
