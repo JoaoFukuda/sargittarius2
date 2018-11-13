@@ -40,6 +40,7 @@ public:
     sf::Vector2f position;
     float radius;
     Planet(){};
+    Planet(int width, int height);
     Planet(float radius, sf::Vector2f position);
     
     sf::CircleShape Draw();
@@ -108,7 +109,7 @@ public:
     Arrow(Player player);
 
     Line Draw();
-    bool Update(PlanetList planets);
+    bool Update(PlanetList planets, PlayerList players);
 };
 
 struct ArrowLink

@@ -24,6 +24,15 @@
 
 #include "object.hpp"
 
+Planet::Planet(int width, int height)
+{
+    radius = (height/10) + (rand()%(height/8));
+    position = sf::Vector2f(
+        (width/4)+rand()%(width/2),
+        (height/4)+rand()%(height/2)
+    );
+}
+
 Planet::Planet(float radius, sf::Vector2f position)
 {
     this->radius = radius;
@@ -74,25 +83,48 @@ Line Arrow::Draw()
     return Line(line);
 }
 
-bool Arrow::Update(PlanetList planets)
+bool Arrow::Update(PlanetList planets, PlayerList players)
 {
-    PlanetLink *curr = planets.head;
-    bool collision = false;
-    while(curr)
+    PlanetLink *currn = planets.head;
+    while(currn)
     {
-        sf::Vector2f relPos = (curr->planet.position - position);
+        sf::Vector2f relPos = (currn->planet.position - position);
         float distance = sqrtf(relPos.x*relPos.x + relPos.y*relPos.y);
         float force =
-            PI*(curr->planet.radius + 350)*(curr->planet.radius + 350)
+            PI*(currn->planet.radius + 350)*(currn->planet.radius + 350)
             /
-            ((distance - curr->planet.radius*7/8)*15000000);
+            ((distance - currn->planet.radius*7/8)*10000000);
 
         velocity = velocity + sf::Vector2f(force * (relPos.x / distance), force * (relPos.y / distance));
 
-        if(distance <= curr->planet.radius) collision = true;
+        if(distance <= currn->planet.radius) return true;
         
-        curr = curr->next;
+        currn = currn->next;
     }
+
+    PlayerLink *curry = players.head;
+    while(curry)
+    {
+        if(curry->player.isAlive)
+        {
+            float rotation = -curry->player.position*PI*2/360;
+            float sine = sin(rotation);
+            float coss = cos(rotation);
+            sf::Vector2f relPos = position - curry->player.planet.position;
+            sf::Vector2f pointTransPos = sf::Vector2f(
+                relPos.x*coss - relPos.y*sine,
+                relPos.x*sine + relPos.y*coss
+            );
+
+            if( pointTransPos.y >= -6 && pointTransPos.y <= 6 &&
+                pointTransPos.x <= curry->player.planet.radius + 24 && pointTransPos.x > 0)
+            {
+                curry->player.isAlive = false;
+            }
+        }
+        curry = curry->next;
+    }
+
     position += velocity;
-    return collision;
+    return false;
 }

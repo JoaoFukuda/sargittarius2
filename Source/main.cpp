@@ -25,6 +25,7 @@
 // Include on sub-files later on (this is just a placeholder for now... or not)
 #include <SFML/Window.hpp>
 #include "object.hpp"
+#include <time.h>
 
 #ifndef IOSTREAM
 #include <iostream>
@@ -37,29 +38,66 @@ enum Part
     Shooting
 };
 
+bool Collide(PlanetList planets, Planet tempPlanet)
+{
+    PlanetLink *curr = planets.head;
+    while(curr)
+    {
+        if(
+            (curr->planet.radius + tempPlanet.radius + 24)*(curr->planet.radius + tempPlanet.radius + 24) >
+            ((curr->planet.position.x - tempPlanet.position.x)*(curr->planet.position.x - tempPlanet.position.x))+((curr->planet.position.y - tempPlanet.position.y)*(curr->planet.position.y - tempPlanet.position.y))
+        ) return true;
+        curr = curr->next;
+    }
+    return false;
+}
+
 int main()
 {
+    srand(time(NULL));
     // Game main window
-    sf::RenderWindow window(sf::VideoMode(640, 480), "Sargittarius 2.X", sf::Style::Close | sf::Style::Resize | sf::Style::Titlebar);
+    sf::VideoMode desktopWindowMode = sf::VideoMode::getDesktopMode();
+    unsigned int WINDOW_WIDTH, WINDOW_HEIGHT;
+    WINDOW_WIDTH = desktopWindowMode.width;
+    WINDOW_HEIGHT = desktopWindowMode.height;
+
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Sargittarius 2.X", sf::Style::None);
+    window.setPosition(sf::Vector2i(0, 0));
 
     Part part = Walking;
+    int numOfPlayers = 2;
+    int numOfPlanets = 3;
 
     PlanetList planets;
     PlayerList players;
     ArrowList arrows;
     
-    // CHANGE TO BE AN AUTOMATIC PLANET/PLAYER CREATOR
-    //-------------------------------------------------
-    Planet planet = Planet(75, sf::Vector2f(200, 100));
-    planets.Push(planet);
-    planet = Planet(40, sf::Vector2f(450, 300));
-    planets.Push(planet);
-    planet = Planet(52, sf::Vector2f(150, 350));
-    planets.Push(planet);
+    for(; numOfPlanets > 0; numOfPlanets--)
+    {
+        Planet tempPlanet;
+        do
+        {
+            tempPlanet = Planet(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    Player player = Player(planets.head->planet);
-    players.Push(player);
-    //-------------------------------------------------
+            window.clear();
+            PlanetLink *currPlanet = planets.head;
+            while(currPlanet)
+            {
+                window.draw(currPlanet->planet.Draw());
+                currPlanet = currPlanet->next;
+            }window.draw(tempPlanet.Draw());
+            window.display();
+
+        }while(Collide(planets, tempPlanet));
+        planets.Push(tempPlanet);
+    }
+
+    PlanetLink *plan = planets.head;
+    for(; numOfPlayers > 0 && plan; numOfPlayers--)
+    {
+        players.Push(Player(plan->planet));
+        plan = plan->next;
+    }
 
     PlayerLink *currentPlayer = players.head;
     sf::Vertex mouseAim[2];
@@ -88,8 +126,8 @@ int main()
             }
             mouseAim[1] = sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window)));
             float tempDist = sqrt((mouseAim[0].position.x - mouseAim[1].position.x)*(mouseAim[0].position.x - mouseAim[1].position.x) + (mouseAim[0].position.y - mouseAim[1].position.y)*(mouseAim[0].position.y - mouseAim[1].position.y));
-            arrows.head->arrow.position = currentPlayer->player.planet.position + sf::Vector2f(cos(currentPlayer->player.position*PI*2/360), sin(currentPlayer->player.position*PI*2/360)) * (planet.radius + 10) + 35.f*sf::Vector2f((mouseAim[0].position.x - mouseAim[1].position.x)/tempDist, (mouseAim[0].position.y - mouseAim[1].position.y)/tempDist);
-            arrows.head->arrow.velocity = sf::Vector2f((mouseAim[0].position.x - mouseAim[1].position.x)/1000, (mouseAim[0].position.y - mouseAim[1].position.y)/1000);
+            arrows.head->arrow.position = currentPlayer->player.planet.position + sf::Vector2f(cos(currentPlayer->player.position*PI*2/360), sin(currentPlayer->player.position*PI*2/360)) * (currentPlayer->player.planet.radius + 10) + 35.f*sf::Vector2f((mouseAim[0].position.x - mouseAim[1].position.x)/tempDist, (mouseAim[0].position.y - mouseAim[1].position.y)/tempDist);
+            arrows.head->arrow.velocity = sf::Vector2f((mouseAim[0].position.x - mouseAim[1].position.x)/500, (mouseAim[0].position.y - mouseAim[1].position.y)/500);
         }
         if(part == Aiming && !sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
@@ -100,12 +138,7 @@ int main()
                 free(aux);
                 part = Walking;
             }
-            else
-            {
-                currentPlayer = currentPlayer->next;
-                if(!currentPlayer) currentPlayer = players.head;
-                part = Shooting;
-            }
+            else part = Shooting;
         }
         if(part == Walking)
         {
@@ -133,12 +166,21 @@ int main()
         PlayerLink *currPlayer = players.head;
         while(currPlayer)
         {
-            window.draw(currPlayer->player.Draw());
+            if(currPlayer->player.isAlive) window.draw(currPlayer->player.Draw());
             currPlayer = currPlayer->next;
         }
 
         ArrowLink *currArrow = arrows.head;
-        if(part == Shooting && currArrow->arrow.Update(planets)) part = Walking;
+        if(part == Shooting && currArrow->arrow.Update(planets, players))
+        {
+            do
+            {
+                currentPlayer = currentPlayer->next;
+                if(!currentPlayer) currentPlayer = players.head;
+            } while(!currentPlayer->player.isAlive);
+
+            part = Walking;
+        }
         while(currArrow)
         {
             window.draw(currArrow->arrow.Draw().vertex, 2, sf::Lines);
