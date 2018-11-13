@@ -20,6 +20,9 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <math.h>
+#define PI 3.14
+
 struct Line
 {
     sf::Vertex vertex[2];

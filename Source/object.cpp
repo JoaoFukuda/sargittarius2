@@ -23,8 +23,6 @@
 #endif
 
 #include "object.hpp"
-#include <math.h>
-#define PI 3.14
 
 Planet::Planet(float radius, sf::Vector2f position)
 {
@@ -63,13 +61,14 @@ Arrow::Arrow(Player player)
 
 Line Arrow::Draw()
 {
+    float distance = sqrt(velocity.x*velocity.x + velocity.y*velocity.y);
     sf::Vector2f tail = sf::Vector2f(
-        (velocity).x * 30 / ((velocity).x + (velocity).y),
-        (velocity).y * 30 / ((velocity).x + (velocity).y)
+        velocity.x * 23 / distance,
+        velocity.y * 23 / distance
     );
     sf::Vertex line[] =
     {
-        tail + position,
+        position - tail,
         sf::Vector2f(position)
     };
     return Line(line);
@@ -82,12 +81,15 @@ bool Arrow::Update(PlanetList planets)
     while(curr)
     {
         sf::Vector2f relPos = (curr->planet.position - position);
-        float distance2 = relPos.x*relPos.x + relPos.y*relPos.y;
-        float force = PI*curr->planet.radius*curr->planet.radius/(distance2 * 1000);
+        float distance = sqrtf(relPos.x*relPos.x + relPos.y*relPos.y);
+        float force =
+            PI*(curr->planet.radius + 350)*(curr->planet.radius + 350)
+            /
+            ((distance - curr->planet.radius*7/8)*15000000);
 
-        velocity = velocity + sf::Vector2f(force * (relPos.x / sqrtf(relPos.y*relPos.y+relPos.x*relPos.x)), force * (relPos.y / sqrtf(relPos.y*relPos.y+relPos.x*relPos.x)));
+        velocity = velocity + sf::Vector2f(force * (relPos.x / distance), force * (relPos.y / distance));
 
-        if(distance2 > curr->planet.radius*curr->planet.radius) collision = true;
+        if(distance <= curr->planet.radius) collision = true;
         
         curr = curr->next;
     }

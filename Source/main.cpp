@@ -40,8 +40,7 @@ enum Part
 int main()
 {
     // Game main window
-    sf::RenderWindow window(sf::VideoMode(640, 480), "Sargittarius 2.X");
-    window.setPosition(sf::Vector2i(200, 200));
+    sf::RenderWindow window(sf::VideoMode(640, 480), "Sargittarius 2.X", sf::Style::Close | sf::Style::Resize | sf::Style::Titlebar);
 
     Part part = Walking;
 
@@ -53,14 +52,17 @@ int main()
     //-------------------------------------------------
     Planet planet = Planet(75, sf::Vector2f(200, 100));
     planets.Push(planet);
+    planet = Planet(40, sf::Vector2f(450, 300));
+    planets.Push(planet);
+    planet = Planet(52, sf::Vector2f(150, 350));
+    planets.Push(planet);
 
-    Player player = Player(planet);
+    Player player = Player(planets.head->planet);
     players.Push(player);
     //-------------------------------------------------
 
     PlayerLink *currentPlayer = players.head;
     sf::Vertex mouseAim[2];
-    
     // Game main loop
     while(window.isOpen())
     {
@@ -85,12 +87,25 @@ int main()
                 part = Aiming;
             }
             mouseAim[1] = sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window)));
+            float tempDist = sqrt((mouseAim[0].position.x - mouseAim[1].position.x)*(mouseAim[0].position.x - mouseAim[1].position.x) + (mouseAim[0].position.y - mouseAim[1].position.y)*(mouseAim[0].position.y - mouseAim[1].position.y));
+            arrows.head->arrow.position = currentPlayer->player.planet.position + sf::Vector2f(cos(currentPlayer->player.position*PI*2/360), sin(currentPlayer->player.position*PI*2/360)) * (planet.radius + 10) + 35.f*sf::Vector2f((mouseAim[0].position.x - mouseAim[1].position.x)/tempDist, (mouseAim[0].position.y - mouseAim[1].position.y)/tempDist);
+            arrows.head->arrow.velocity = sf::Vector2f((mouseAim[0].position.x - mouseAim[1].position.x)/1000, (mouseAim[0].position.y - mouseAim[1].position.y)/1000);
         }
         if(part == Aiming && !sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
-            currentPlayer = currentPlayer->next;
-            if(!currentPlayer) currentPlayer = players.head;
-            part = Walking;
+            if((arrows.head->arrow.velocity.x*1000)*(arrows.head->arrow.velocity.x*1000) < 25 && (arrows.head->arrow.velocity.y*1000)*(arrows.head->arrow.velocity.y*1000) < 25)
+            {
+                ArrowLink *aux = arrows.head;
+                arrows.head = arrows.head->next;
+                free(aux);
+                part = Walking;
+            }
+            else
+            {
+                currentPlayer = currentPlayer->next;
+                if(!currentPlayer) currentPlayer = players.head;
+                part = Shooting;
+            }
         }
         if(part == Walking)
         {
