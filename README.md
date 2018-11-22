@@ -4,6 +4,7 @@ Esse jogo utiliza C++ e SFML para criar seus gráficos super bonitos e de últim
 
 ## O executável pré-compilado não está disponível... **ainda**!
 O farei assim que achar que o jogo está em um estado minimamente apresentável, disponibilizarei aqui um link para a página do itch.io dele (com um zip que contem todos os arquivos atualmente na pasta ".\\master\\bin\\x86\\*").
+###### Ele já está disponível na pasta binária desse repositório, mas não ta divertido ainda
 
 ## Como jogar?
 **CALMA!** O jogo ainda nem está num estado jogável ainda! Quando for possível jogar, farei um manual completinho para o jogo.<br/>

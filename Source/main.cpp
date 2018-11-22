@@ -52,16 +52,31 @@ bool Collide(PlanetList planets, Planet tempPlanet)
     return false;
 }
 
+int NumOfPlayersAlive(PlayerList list)
+{
+    PlayerLink *current = list.head;
+    int num = 0;
+    while(current)
+    {
+        if(current->player.isAlive)
+        {
+            num++;
+        }
+        current = current->next;
+    }
+    return num;
+}
+
 int main()
 {
     srand(time(NULL));
     // Game main window
     sf::VideoMode desktopWindowMode = sf::VideoMode::getDesktopMode();
     unsigned int WINDOW_WIDTH, WINDOW_HEIGHT;
-    WINDOW_WIDTH = desktopWindowMode.width;
-    WINDOW_HEIGHT = desktopWindowMode.height;
+    WINDOW_WIDTH = 640;//desktopWindowMode.width;
+    WINDOW_HEIGHT = 480;//desktopWindowMode.height;
 
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Sargittarius 2.X", sf::Style::None);
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Sargittarius 2.X", sf::Style::Default);
     window.setPosition(sf::Vector2i(0, 0));
 
     Part part = Walking;
@@ -93,7 +108,7 @@ int main()
     }
 
     PlanetLink *plan = planets.head;
-    for(; numOfPlayers > 0 && plan; numOfPlayers--)
+    for(int nop = numOfPlayers; nop > 0 && plan; nop--)
     {
         players.Push(Player(plan->planet));
         plan = plan->next;
@@ -173,11 +188,17 @@ int main()
         ArrowLink *currArrow = arrows.head;
         if(part == Shooting && currArrow->arrow.Update(planets, players))
         {
-            do
+            if(NumOfPlayersAlive(players) > 0)
+                do
+                {
+                    currentPlayer = currentPlayer->next;
+                    if(!currentPlayer) currentPlayer = players.head;
+                } while(!currentPlayer->player.isAlive);
+            else
             {
-                currentPlayer = currentPlayer->next;
-                if(!currentPlayer) currentPlayer = players.head;
-            } while(!currentPlayer->player.isAlive);
+                //TODO: What to do when there are no players left?
+                window.close();
+            }
 
             part = Walking;
         }
