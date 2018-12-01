@@ -34,22 +34,23 @@
             "problemMatcher": []
         },
         {
-            "label": "Compilar Jogo(x64)",
+            "label": "Compilar Jogo(Linux)",
             "type": "shell",
-            "command": "Dependencias\\x64\\MinGW\\bin\\g++.exe",
+            "command": "g++",
             "args": [
                 "-o",
-                "bin\\x64\\sargittarius2.exe",
+                "bin/Linux/sargittarius2",
                 
                 "-g",
                 "-Wall",
                 // "-mwindows",
                 
-                "-IDependencias\\x64\\SFML\\include",
+                "-IDependencias/Linux/SFML/include",
                 
-                "Source\\main.cpp",
+                "Source/object.cpp",
+                "Source/main.cpp",
                 
-                "-LDependencias\\x64\\SFML\\lib",
+                "-LDependencias/Linux/SFML/lib",
                 "-lsfml-graphics",
                 "-lsfml-window",
                 "-lsfml-system",
