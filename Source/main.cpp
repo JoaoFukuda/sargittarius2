@@ -108,7 +108,7 @@ int main()
     }
 
     PlanetLink *plan = planets.head;
-    for(int nop = numOfPlayers; nop > 0 && plan; nop--)
+    for(; numOfPlayers > 0 && plan; numOfPlayers--)
     {
         players.Push(Player(plan->planet));
         plan = plan->next;
