@@ -78,7 +78,7 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Sargittarius 2.X", sf::Style::Default);
     window.setPosition(sf::Vector2i(0, 0));
-    window.setFramerateLimit(1000);
+    window.setFramerateLimit(125);
 
     Part part = Walking;
     int numOfPlayers = 2;
@@ -143,7 +143,7 @@ int main()
             mouseAim[1] = sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window)));
             float tempDist = sqrt((mouseAim[0].position.x - mouseAim[1].position.x)*(mouseAim[0].position.x - mouseAim[1].position.x) + (mouseAim[0].position.y - mouseAim[1].position.y)*(mouseAim[0].position.y - mouseAim[1].position.y));
             arrows.head->arrow.position = currentPlayer->player.planet.position + sf::Vector2f(cos(currentPlayer->player.position*PI*2/360), sin(currentPlayer->player.position*PI*2/360)) * (currentPlayer->player.planet.radius + 10) + 35.f*sf::Vector2f((mouseAim[0].position.x - mouseAim[1].position.x)/tempDist, (mouseAim[0].position.y - mouseAim[1].position.y)/tempDist);
-            arrows.head->arrow.velocity = sf::Vector2f((mouseAim[0].position.x - mouseAim[1].position.x)/500, (mouseAim[0].position.y - mouseAim[1].position.y)/500);
+            arrows.head->arrow.velocity = sf::Vector2f((mouseAim[0].position.x - mouseAim[1].position.x)/62.5, (mouseAim[0].position.y - mouseAim[1].position.y)/62.5);
         }
         if(part == Aiming && !sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
@@ -160,11 +160,11 @@ int main()
         {
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
             {
-                currentPlayer->player.position += 16 / currentPlayer->player.planet.radius;
+                currentPlayer->player.position += 128 / currentPlayer->player.planet.radius;
             }
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
             {
-                currentPlayer->player.position -= 16 / currentPlayer->player.planet.radius;
+                currentPlayer->player.position -= 128 / currentPlayer->player.planet.radius;
             }
         }
 
@@ -214,10 +214,9 @@ int main()
     }
 
     #ifdef __unix__
-        std::cout << "Press enter to continue ...";
-        std::cin.get();
+        system("clear");
     #else
-        system("pause");
+        system("cls");
     #endif
 
     return 0;

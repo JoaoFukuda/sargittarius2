@@ -93,7 +93,7 @@ bool Arrow::Update(PlanetList planets, PlayerList players)
         float force =
             PI*(currn->planet.radius + 350)*(currn->planet.radius + 350)
             /
-            ((distance - currn->planet.radius*7/8)*10000000);
+            ((distance - currn->planet.radius*7/8)*300000);
 
         velocity = velocity + sf::Vector2f(force * (relPos.x / distance), force * (relPos.y / distance));
 
