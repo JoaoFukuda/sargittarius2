@@ -71,13 +71,14 @@ int main()
 {
     srand(time(NULL));
     // Game main window
-    sf::VideoMode desktopWindowMode = sf::VideoMode::getDesktopMode();
+    //sf::VideoMode desktopWindowMode = sf::VideoMode::getDesktopMode();
     unsigned int WINDOW_WIDTH, WINDOW_HEIGHT;
     WINDOW_WIDTH = 640;//desktopWindowMode.width;
     WINDOW_HEIGHT = 480;//desktopWindowMode.height;
 
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Sargittarius 2.X", sf::Style::Default);
     window.setPosition(sf::Vector2i(0, 0));
+    window.setFramerateLimit(1000);
 
     Part part = Walking;
     int numOfPlayers = 2;
@@ -212,7 +213,12 @@ int main()
         window.display();
     }
 
-    system("pause");
+    #ifdef __unix__
+        std::cout << "Press enter to continue ...";
+        std::cin.get();
+    #else
+        system("pause");
+    #endif
 
     return 0;
 }
