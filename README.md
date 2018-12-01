@@ -20,4 +20,4 @@ Mas só o x86 (só vai precisar re-compilar se quiser mudar alguma coisa ou se e
 
 ## Contribuintes
 * [João Fukuda](https://github.com/JoaoFukuda) - *Programador chefe, "Idealizador" (eu que achei o jogo e gostei dele)*
-* Mais ninguém (crise ta foda)
+* Leonardo (Gringo) Bonini - *Deu ideias, ta valendo*

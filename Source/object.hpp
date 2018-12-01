@@ -39,9 +39,12 @@ class Planet
 public:
     sf::Vector2f position;
     float radius;
+    float maxRadius;
     Planet(){};
     Planet(int width, int height);
     Planet(float radius, sf::Vector2f position);
+
+    void setRadius(int n);
     
     sf::CircleShape Draw();
 };
@@ -68,12 +71,13 @@ struct PlanetList
 class Player
 {
 public:
-    Planet planet;
+    Planet *planet;
     float position;
     bool isAlive;
+    int hp = 4;
     
     Player(){};
-    Player(Planet planet);
+    Player(Planet *planet);
 
     sf::RectangleShape Draw();
 };
@@ -112,6 +116,7 @@ public:
     bool Update(PlanetList planets, PlayerList players);
 };
 
+//TODO: Lista estática 
 struct ArrowLink
 {
     Arrow arrow;

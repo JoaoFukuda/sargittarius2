@@ -27,6 +27,7 @@
 Planet::Planet(int width, int height)
 {
     radius = (height/10) + (rand()%(height/8));
+    maxRadius = radius;
     position = sf::Vector2f(
         (width/4)+rand()%(width/2),
         (height/4)+rand()%(height/2)
@@ -47,7 +48,12 @@ sf::CircleShape Planet::Draw()
     return shape;
 }
 
-Player::Player(Planet planet)
+void Planet::setRadius(int n)
+{
+    radius = n;
+}
+
+Player::Player(Planet *planet)
 {
     this->planet = planet;
     isAlive = true;
@@ -58,8 +64,8 @@ sf::RectangleShape Player::Draw()
     sf::RectangleShape shape = sf::RectangleShape(sf::Vector2f(24, 12));
     shape.setOrigin(12, 6);
     shape.setRotation(position);
-    sf::Vector2f posOffset = sf::Vector2f(cos(position*PI*2/360), sin(position*PI*2/360)) * (planet.radius + 10);
-    shape.setPosition(planet.position + posOffset);
+    sf::Vector2f posOffset = sf::Vector2f(cos(position*PI*2/360), sin(position*PI*2/360)) * (planet->radius + 10);
+    shape.setPosition(planet->position + posOffset);
     return shape;
 }
 
@@ -110,16 +116,18 @@ bool Arrow::Update(PlanetList planets, PlayerList players)
             float rotation = -curry->player.position*PI*2/360;
             float sine = sin(rotation);
             float coss = cos(rotation);
-            sf::Vector2f relPos = position - curry->player.planet.position;
+            sf::Vector2f relPos = position - curry->player.planet->position;
             sf::Vector2f pointTransPos = sf::Vector2f(
                 relPos.x*coss - relPos.y*sine,
                 relPos.x*sine + relPos.y*coss
             );
 
             if( pointTransPos.y >= -6 && pointTransPos.y <= 6 &&
-                pointTransPos.x <= curry->player.planet.radius + 24 && pointTransPos.x > 0)
+                pointTransPos.x <= curry->player.planet->radius + 24 && pointTransPos.x > 0)
             {
+                curry->player.hp--;
                 curry->player.isAlive = false;
+                curry->player.planet->setRadius(curry->player.planet->maxRadius*curry->player.hp/4);
             }
         }
         curry = curry->next;
